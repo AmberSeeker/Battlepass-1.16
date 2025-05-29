@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: AmberUtils
+Specification-Vendor: AmberSeeker
+Specification-Version: 0.0.1
+Implementation-Title: BattlePass-1.16.5-Arc
+Implementation-Version: 0.0.1
+Implementation-Vendor: AmberSeeker
+Implementation-Timestamp: 2025-05-29T17:57:02+0530
+
