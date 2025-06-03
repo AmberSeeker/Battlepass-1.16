@@ -2,7 +2,7 @@ package battlepass.main;
 
 import io.izzel.arclight.api.Arclight;
 
-import battlepass.commands.CommandsBuilder;
+import battlepass.commands.BattlePassCommand;
 import battlepass.config.BattlePassConfig;
 import battlepass.config.BattlePassReward;
 import battlepass.config.BattlePassText;
@@ -101,8 +101,7 @@ public class Battlepass extends JavaPlugin {
         }
 
         // TODO: Change to singular /battlepass command
-        CommandsBuilder.buildCommands(this);
-        // new BattlePassCommand(this);
+        new BattlePassCommand(this);
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         Arclight.registerForgeEvent(this, Pixelmon.EVENT_BUS, new PixelmonEvents());
 
