@@ -2,24 +2,46 @@ name: BattlePass
 version: 1.0
 main: battlepass.main.Battlepass
 author: Amber
-description: Just NO.
+description: Players love to hate on this.
 api-version: 1.16
+depend:
+  - Vault
+
 commands:
-  reload:
-    description: Reload Battlepass Command
-    permission: battlepass.reload
-  setxp:
-    description: Sets battlepass xp
-    permission: battlepass.setxp
-  addxp:
-    description: Adds battlepass xp
-    permission: battlepass.addxp
-  checkxp:
-    description: Checks battlepass xp
-    permission: battlepass.checkxp
-  top:
-    description: Top battlepass players
-    permission: battlepass.top
   battlepass:
     description: Main battlepass command
-    usage: /<command>
+    usage: /<command> <reload|setxp|addxp|checkxp|top|open>
+    aliases: [bpass]
+
+permissions:
+  battlepass.use:
+    description: Allows the player to use the battlepass
+    default: true
+
+  battlepass.top:
+    description: Allows the player to check the top battlepass players
+    default: true
+
+  battlepass.reload:
+    description: Allows the player to use /bpack
+    default: op
+
+  battlepass.premium:
+    description: Allows the player to use premium battlepass features
+    default: false
+
+  battlepass.setxp:
+    description: Allows to set battlepass xp of a player
+    default: op
+
+  battlepass.addxp:
+    description: Allows to add battlepass xp to a player
+    default: op
+  
+  battlepass.checkxp:
+    description: Allows to check battlepass xp of a player
+    default: op
+
+  battlepass.multiplier:
+    description: Allows to set the battlepass multiplier
+    default: false

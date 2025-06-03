@@ -19,7 +19,7 @@ public class CommandsBuilder {
     private static void registerCommand(Battlepass plugin, String name, Object executor) {
         PluginCommand command = plugin.getCommand(name);
         if (command == null) {
-            plugin.getLogg().warn("Command " + name + " is not defined in plugin.yml");
+            plugin.getLogger().warning("Command " + name + " is not defined in plugin.yml");
             return;
         }
         if (executor instanceof CommandExecutor) {

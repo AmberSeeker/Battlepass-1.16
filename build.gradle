@@ -88,8 +88,11 @@ tasks.withType(JavaCompile)
 dependencies {
     minecraft 'net.minecraftforge:forge:' + forgeVersion
     compileOnly 'org.spigotmc:spigot-api:' + spigotVersion
-    implementation 'io.izzel.arclight:arclight-api:1.6.3'
-    implementation 'com.h2database:h2:2.1.214'
+    implementation 'io.izzel.arclight:arclight-api:' + arcapiVersion
+    // implementation 'com.h2database:h2:2.1.214'
+    // implementation 'com.github.NickImpact:GooeyLibs:1.16.5-latest-SNAPSHOT'
+    implementation 'com.github.AmberSeeker:GooeyLibs:v1.16-2.3.4'
+    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
     //compileOnly 'org.spongepowered:spongeapi:' + spongeVersion
     compileOnly 'pixelmon:Pixelmon-'+ mcVersion +'-' + pixelmonVersion + '-server:' + pixelmonVersion
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])

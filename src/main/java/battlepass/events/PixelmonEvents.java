@@ -9,7 +9,8 @@ import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.api.events.FishingEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import org.bukkit.entity.Player;
+
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PixelmonEvents {
@@ -32,9 +33,9 @@ public class PixelmonEvents {
               xpGained += baseXp;
             }
           }
-          Utils.handleXP((Player) event.player, player, xpGained);
+          Utils.handleXP(Bukkit.getPlayer(event.player.getUUID()), player, xpGained);
         }
-      }.runTaskAsynchronously(Battlepass.get());
+      }.runTaskAsynchronously(Battlepass.getInstance());
     }
   }
   
@@ -48,9 +49,9 @@ public class PixelmonEvents {
           double baseXp = Battlepass.getInstance().battlePassXp.catchXp;
           int lvl = (event.getPokemon().getLvl().getPokemonLevel() > 100) ? 100 : event.getPokemon().getLvl().getPokemonLevel();
           int xpGained = (int) (baseXp + lvl * Battlepass.getInstance().battlePassXp.catchXpMultiplier);
-          Utils.handleXP((Player) event.getPlayer(), player, xpGained);
+          Utils.handleXP(Bukkit.getPlayer(event.getPlayer().getUUID()), player, xpGained);
         }
-      }.runTaskAsynchronously(Battlepass.get());
+      }.runTaskAsynchronously(Battlepass.getInstance());
     }
   }
   
@@ -65,9 +66,9 @@ public class PixelmonEvents {
           double baseXp = Battlepass.getInstance().battlePassXp.fishingXp;
           int lvl = (pokemon.getLvl().getPokemonLevel() > 100) ? 100 : pokemon.getLvl().getPokemonLevel();
           int xpGained = (int) (baseXp + lvl * Battlepass.getInstance().battlePassXp.fishingXpMultiplier);
-          Utils.handleXP((Player) event.player, player, xpGained);
+          Utils.handleXP(Bukkit.getPlayer(event.player.getUUID()), player, xpGained);
         }
-      }.runTaskAsynchronously(Battlepass.get());
+      }.runTaskAsynchronously(Battlepass.getInstance());
     }
   }
 }

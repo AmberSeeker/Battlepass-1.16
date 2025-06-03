@@ -12,15 +12,15 @@ public class BattlePassConfig {
 
     public BattlePassConfig(FileConfiguration config) {
         this.config = config;
-        Battlepass.get().rewardMap = new HashMap<>();
-        Battlepass.get().premiumRewardMap = new HashMap<>();
+        Battlepass.getInstance().rewardMap = new HashMap<>();
+        Battlepass.getInstance().premiumRewardMap = new HashMap<>();
         for (int x = 1; x < 28; x++) {
             BattlePassReward battlePassReward = getBattlePassReward("" + x, false);
             BattlePassReward premiumBattlePassReward = getBattlePassReward("" + x, true);
             if (battlePassReward != null)
-                Battlepass.get().rewardMap.put(battlePassReward.getPosition(), battlePassReward);
+                Battlepass.getInstance().rewardMap.put(battlePassReward.getPosition(), battlePassReward);
             if (premiumBattlePassReward != null)
-                Battlepass.get().premiumRewardMap.put(premiumBattlePassReward.getPosition(), premiumBattlePassReward);
+                Battlepass.getInstance().premiumRewardMap.put(premiumBattlePassReward.getPosition(), premiumBattlePassReward);
         }
         loadXPRates();
         loadText();
@@ -39,14 +39,14 @@ public class BattlePassConfig {
             List<String> lore = rewards.getStringList("lore");
             return new BattlePassReward(displayName, itemType, lvl, position, money, commands, lore);
         } else {
-            Battlepass.getLogg().error("Error when trying to load reward " + name);
+            Battlepass.getInstance().getLogger().severe("Error when trying to load reward " + name);
             return null;
         }
     }
 
     public void loadXPRates() {
         ConfigurationSection xp = config.getConfigurationSection("xp");
-        BattlePassXp battlePassXp = Battlepass.get().battlePassXp;
+        BattlePassXp battlePassXp = Battlepass.getInstance().battlePassXp;
         if (xp != null) {
             battlePassXp.defeatXp = xp.getDouble("defeatPokemon");
             battlePassXp.defeatXpMultiplier = xp.getDouble("defeatPokemonMultiplier");
@@ -55,18 +55,18 @@ public class BattlePassConfig {
             battlePassXp.fishingXp = xp.getDouble("fishingPokemon");
             battlePassXp.fishingXpMultiplier = xp.getDouble("fishingPokemonMultiplier");
         } else {
-            Battlepass.getLogg().error("Error when trying to load xp rates");
+            Battlepass.getInstance().getLogger().severe("Error when trying to load xp rates");
         }
     }
 
     public void loadText() {
         ConfigurationSection text = config.getConfigurationSection("text");
-        BattlePassText battlePassText = Battlepass.get().battlePassText;
+        BattlePassText battlePassText = Battlepass.getInstance().battlePassText;
         if (text != null) {
             battlePassText.battlePassTitle = text.getString("battlePassTitle");
             battlePassText.premiumRequiredText = text.getString("premiumRequiredText");
         } else {
-            Battlepass.getLogg().error("Error when trying to load text");
+            Battlepass.getInstance().getLogger().severe("Error when trying to load text");
         }
     }
 
@@ -77,12 +77,12 @@ public class BattlePassConfig {
 
     public void loadMain() {
         ConfigurationSection text = config.getConfigurationSection("main");
-        BattlePassText battlePassText = Battlepass.get().battlePassText;
+        BattlePassText battlePassText = Battlepass.getInstance().battlePassText;
         if (text != null) {
             battlePassText.battlePassTitle = text.getString("battlePassTitle");
             battlePassText.premiumRequiredText = text.getString("premiumRequiredText");
         } else {
-            Battlepass.getLogg().error("Error when trying to load text");
+            Battlepass.getInstance().getLogger().severe("Error when trying to load text");
         }
     }
 }

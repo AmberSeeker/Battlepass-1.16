@@ -16,7 +16,7 @@ public class PlayerEvents implements Listener {
     Player player = event.getPlayer();
     // BattlepassPlayer battlepassPlayer = Battlepass.getDatabase().loadPlayer(player.getUniqueId());
     if (Battlepass.getInstance().playerDataMap.get(player.getUniqueId()) == null) {
-      Bukkit.getScheduler().runTaskAsynchronously(Battlepass.get(), () -> {
+      Bukkit.getScheduler().runTaskAsynchronously(Battlepass.getInstance(), () -> {
         Battlepass.getDatabase().loadPlayer(player.getUniqueId());
       });
     }
@@ -27,11 +27,11 @@ public class PlayerEvents implements Listener {
     Player player = event.getPlayer();
     BattlepassPlayer battlepassPlayer = Battlepass.getInstance().playerDataMap.get(player.getUniqueId());
     if (battlepassPlayer != null) {
-      Bukkit.getScheduler().runTaskAsynchronously(Battlepass.get(), () -> {
+      Bukkit.getScheduler().runTaskAsynchronously(Battlepass.getInstance(), () -> {
         Battlepass.getDatabase().savePlayer(battlepassPlayer);
       });
     } else {
-      Battlepass.getLogg().warn("Failed to save " + player.getName());
+      Battlepass.getInstance().getLogger().warning("Failed to save " + player.getName());
     }
   }
 }

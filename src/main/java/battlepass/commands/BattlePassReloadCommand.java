@@ -11,7 +11,7 @@ public class BattlePassReloadCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage(ChatColor.GREEN + "Reloading the plugin");
-        Battlepass.get().loadBattlePassConfig();
+        Battlepass.getInstance().loadBattlePassConfig();
         return true;
     }
 }
