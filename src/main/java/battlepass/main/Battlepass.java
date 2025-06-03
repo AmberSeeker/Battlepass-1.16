@@ -2,7 +2,7 @@ package battlepass.main;
 
 import io.izzel.arclight.api.Arclight;
 
-import battlepass.commands.BattlePassCommand;
+import battlepass.commands.CommandsBuilder;
 import battlepass.config.BattlePassConfig;
 import battlepass.config.BattlePassReward;
 import battlepass.config.BattlePassText;
