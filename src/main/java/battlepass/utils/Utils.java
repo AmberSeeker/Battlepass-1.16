@@ -8,17 +8,13 @@ import org.bukkit.Sound;
 import org.bukkit.ChatColor;
 import java.util.List;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.metadata.MetadataValue;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.Duration;
-import java.util.Optional;
 
 public class Utils {
 
@@ -92,10 +88,22 @@ public class Utils {
         }
     }
 
-    private static void processRewards(BattlePassReward reward, Player player) {
+    public static void processRewards(BattlePassReward reward, Player player) {
         if (reward.getMoney() > 0) {
             // Handle money reward
-            // Assuming you have an Economy plugin installed and a method to deposit money to player's account
+            if (Battlepass.getInstance().getVaultEconomy() != null) {
+                double money = reward.getMoney();
+                double currentMoney = Battlepass.getInstance().getVaultEconomy().getBalance(player);
+                if (Battlepass.getInstance().getVaultEconomy().depositPlayer(player, money).transactionSuccess()) {
+                    player.sendMessage("§eYou have received " + getFormattedDouble(money) + " money.");
+                    Battlepass.getInstance().getLogger().info(player.getName() + " received " + getFormattedDouble(money) + " money. Previous balance: " + getFormattedDouble(currentMoney) + ", New balance: " + getFormattedDouble(currentMoney + money));
+                } else {
+                    player.sendMessage("§cFailed to deposit money. Please contact an admin.");
+                    Battlepass.getInstance().getLogger().warning("Failed to deposit money for " + player.getName() + ".");
+                }
+            } else {
+                Battlepass.getInstance().getLogger().warning("No economy plugin found. Money rewards are not available.");
+            }
         }
         if (reward.getCommands() != null) {
             // Handle command rewards

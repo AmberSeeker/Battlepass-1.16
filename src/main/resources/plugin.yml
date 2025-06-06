@@ -1,5 +1,5 @@
 name: BattlePass
-version: 1.0
+version: 1.1
 main: battlepass.main.Battlepass
 author: Amber
 description: Players love to hate on this.
@@ -23,11 +23,11 @@ permissions:
     default: true
 
   battlepass.reload:
-    description: Allows the player to use /bpack
+    description: Allows the player to reload the battlepass configuration
     default: op
 
   battlepass.premium:
-    description: Allows the player to use premium battlepass features
+    description: Allows the player to use premium battlepass
     default: false
 
   battlepass.setxp:

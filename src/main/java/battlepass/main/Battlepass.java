@@ -11,10 +11,12 @@ import battlepass.db_entities.BattlepassPlayer;
 import battlepass.db_handler.DBHandler;
 import battlepass.events.*;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import ca.landonjw.gooeylibs2.api.UIManager;
 import net.minecraftforge.fml.ModList;
 
@@ -53,6 +55,32 @@ public class Battlepass extends JavaPlugin {
 
     private BattlePassConfig battlePassConfig;
 
+    public static Permission vaultPermission = null;
+    
+    public static Economy vaultEconomy = null;
+
+    private boolean setupVault() {
+        RegisteredServiceProvider<Economy> rspe = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rspe != null) {
+            vaultEconomy = rspe.getProvider();
+        }
+
+        RegisteredServiceProvider<Permission> rspp = getServer().getServicesManager().getRegistration(Permission.class);
+        if (rspp != null) {
+            vaultPermission = rspp.getProvider();
+        }
+
+        return (vaultEconomy != null && vaultPermission != null);
+    }
+
+    public Economy getVaultEconomy() {
+        return vaultEconomy;
+    }
+    
+    public Permission getVaultPermission() {
+        return vaultPermission;
+    }
+
     public static DBHandler getDatabase() {
         return database;
     }
@@ -80,14 +108,25 @@ public class Battlepass extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!ModList.get().isLoaded("gooeylibs2")) {
-            getLogger().severe("GooeyLibs is required but not loaded! Disabling plugin.");
+        getLogger().info("GooeyLibs found: " + (ModList.get().isLoaded("gooeylibs2")? "§aYes" : "§cNo"));
+        getLogger().info("Pixelmon found: " + (ModList.get().isLoaded("pixelmon") ? "§aYes" : "§cNo"));
+
+        if (!ModList.get().isLoaded("gooeylibs2") || !ModList.get().isLoaded("pixelmon")) {
+            getLogger().severe("Pixelmon and GooeyLibs are required for this plugin to function! Disabling plugin.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
         instance = this;
         database = new DBHandler();
 
+        // Vault setup
+        getLogger().info("Hooking into Vault...");
+        if (!setupVault()) {
+            getLogger().severe("Vault not found or not properly set up! Disabling plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        getLogger().info("Hooked into Vault!");
         loadBattlePassConfig();
 
         // Initialize database
