@@ -11,6 +11,7 @@ import battlepass.db_entities.BattlepassPlayer;
 import battlepass.db_handler.DBHandler;
 import battlepass.events.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +35,8 @@ public class Battlepass extends JavaPlugin {
     private static Battlepass instance;
 
     private static final String CONFIG = "battlepass.conf";
+
+    public final String PLUGIN_NAME = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_BLUE + "Battlepass"+ ChatColor.DARK_GRAY + "] ";
 
     public final Map<UUID, BattlepassPlayer> playerDataMap = new HashMap<>();
 

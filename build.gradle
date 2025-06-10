@@ -85,6 +85,12 @@ tasks.withType(JavaCompile)
     task.options.fork = true
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:' + forgeVersion
     compileOnly 'org.spigotmc:spigot-api:' + spigotVersion
