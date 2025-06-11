@@ -1,6 +1,7 @@
 # Folders
 build
 .gradle
+server
 # Compiled class file
 *.class
 

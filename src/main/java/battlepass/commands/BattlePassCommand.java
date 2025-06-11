@@ -20,6 +20,7 @@ import battlepass.config.BattlePassPermissions;
 import battlepass.config.BattlePassReward;
 import battlepass.db_entities.BattlepassPlayer;
 import battlepass.main.Battlepass;
+import battlepass.ui.BattlePassLeaderboard;
 import battlepass.ui.BattlePassMenu;
 import battlepass.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
@@ -184,7 +185,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            // First argument - show all subcommands
             List<String> subCommands = Arrays.asList("reload", "top", "checkxp", "addxp", "setxp", "help",
                     "claimpremium");
             String input = args[0].toLowerCase();
@@ -195,7 +195,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
                 }
             }
         } else if (args.length == 2) {
-            // Second argument - depends on the subcommand
             String subCommand = args[0].toLowerCase();
 
             switch (subCommand) {
@@ -215,7 +214,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
                 case "top":
                 case "help":
                 case "claimpremium":
-                    // These commands don't take additional arguments
                     break;
             }
         } else if (args.length == 3) {
@@ -225,8 +223,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
             switch (subCommand) {
                 case "addxp":
                 case "setxp":
-                    // No tab completion for XP amount (integer input)
-                    // Could optionally add some example values
                     break;
             }
         }
@@ -249,21 +245,7 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(plugin.PLUGIN_NAME + ChatColor.RED + "Usage: /battlepass top");
             return;
         }
-
-        if (!plugin.getBattlePassConfig().leaderboardGUIEnabled()) {
-            List<BattlepassPlayer> playerList = Battlepass.getDatabase().getTopPlayers();
-            sender.sendMessage(Utils.toText("&7&l=== &4&lBattlepass Leaderboard &7&l==="));
-            showPlayers(sender, playerList);
-
-        } else {
-            // Open leaderboard GUI if enabled
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(plugin.PLUGIN_NAME + ChatColor.RED + "This command can only be used by players!");
-                return;
-            }
-            Player player = (Player) sender;
-            BattlePassMenu.openMenu(player);
-        }
+        BattlePassLeaderboard.openMenu(sender);
     }
 
     private void handleCheckXpCommand(CommandSender sender, String[] args) {
@@ -484,22 +466,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
 
         player.sendMessage(plugin.PLUGIN_NAME + ChatColor.GREEN + "You have claimed your premium rewards up to tier " + storedTier + "!");
         player.sendMessage(plugin.PLUGIN_NAME + ChatColor.YELLOW + "Thank you for supporting the server!");
-    }
-
-    private void showPlayers(CommandSender sender, List<BattlepassPlayer> playerList) {
-        List<BattlepassPlayer> sortedPlayers = new ArrayList<>(playerList);
-        sortedPlayers.sort(Comparator.comparingLong(BattlepassPlayer::getXp).reversed());
-        for (int x = 0; x < sortedPlayers.size(); x++) {
-            BattlepassPlayer bpp = sortedPlayers.get(x);
-            UUID playerId = bpp.getId();
-            long xp = bpp.getXp();
-            int lvl = (int) Utils.getLvl(xp) + 1;
-            int pos = x + 1;
-            String playerName = Bukkit.getOfflinePlayer(playerId).getName();
-            String formattedXp = Utils.getFormattedLong(xp);
-            sender.sendMessage(Utils
-                    .toText("&7[&f" + pos + "&7]&e " + playerName + ": Lvl " + lvl + " &f-&b " + formattedXp + " xp"));
-        }
     }
 }
 

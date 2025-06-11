@@ -3,9 +3,12 @@ package battlepass.ui;
 import battlepass.db_entities.BattlepassPlayer;
 import battlepass.main.Battlepass;
 import battlepass.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,18 +24,26 @@ import java.util.UUID;
 
 public class BattlePassLeaderboard {
 
-    public static void openMenu(Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(Battlepass.getInstance(), () -> {
-            List<BattlepassPlayer> playerList = Battlepass.getDatabase().getTopPlayers();
-            if (playerList != null) {
-                Inventory inventory = Bukkit.createInventory(null, 54, "  §8§lBattlepass Leaderboard");
-                showPlayers(playerList, inventory);
-                player.openInventory(inventory);
-            }
-        });
+    public static void openMenu(CommandSender sender) {
+        List<BattlepassPlayer> playerList = Battlepass.getDatabase().getTopPlayers();
+        if (playerList == null || playerList.isEmpty()) {
+            sender.sendMessage(ChatColor.RED + "No players found in the leaderboard.");
+            return;
+        }
+        if (!Battlepass.getInstance().getBattlePassConfig().leaderboardGUIEnabled()) {
+            showPlayers(sender, playerList);
+            return;
+        }
+        if (sender instanceof Player player) {
+            Inventory inventory = Bukkit.createInventory(null, 54, "  §8§lBattlepass Leaderboard");
+            showPlayers(inventory, playerList);
+            player.openInventory(inventory);
+        } else {
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
+        }
     }
 
-    private static void showPlayers(List<BattlepassPlayer> playerList, Inventory inventory) {
+    private static void showPlayers(Inventory inventory, List<BattlepassPlayer> playerList) {
         List<BattlepassPlayer> sortedPlayers = new ArrayList<>(playerList);
         sortedPlayers.sort(Comparator.comparingDouble(BattlepassPlayer::getXp).reversed());
 
@@ -52,6 +63,22 @@ public class BattlePassLeaderboard {
                     });
                 }
             }
+        }
+    }
+
+    private static void showPlayers(CommandSender sender, List<BattlepassPlayer> playerList) {
+        List<BattlepassPlayer> sortedPlayers = new ArrayList<>(playerList);
+        sortedPlayers.sort(Comparator.comparingLong(BattlepassPlayer::getXp).reversed());
+        for (int x = 0; x < sortedPlayers.size(); x++) {
+            BattlepassPlayer bpp = sortedPlayers.get(x);
+            UUID playerId = bpp.getId();
+            long xp = bpp.getXp();
+            int lvl = (int) Utils.getLvl(xp) + 1;
+            int pos = x + 1;
+            String playerName = Bukkit.getOfflinePlayer(playerId).getName();
+            String formattedXp = Utils.getFormattedLong(xp);
+            sender.sendMessage(Utils
+                    .toText("&7[&f" + pos + "&7]&e " + playerName + ": Lvl " + lvl + " &f-&b " + formattedXp + " xp"));
         }
     }
 
