@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class DBHandler {
-  
+
   public void createTables() {
     String sql = "CREATE TABLE IF NOT EXISTS players (\n" +
-            " id TEXT PRIMARY KEY,\n" +
-            " xp INTEGER DEFAULT 0\n" +
-            ");";
+        " id TEXT PRIMARY KEY,\n" +
+        " xp INTEGER DEFAULT 0\n" +
+        ");";
     executeSQLStatement(sql);
   }
-  
+
   public void savePlayer(BattlepassPlayer battlepassPlayer) {
     String sql = "INSERT OR REPLACE INTO players (id, xp) VALUES(?, ?)";
     try (Connection conn = Battlepass.getInstance().getConnection()) {
@@ -34,7 +34,7 @@ public class DBHandler {
       Battlepass.getInstance().getLogger().warning(e.getMessage());
     }
   }
-  
+
   public void loadPlayer(UUID uuid) {
     new BukkitRunnable() {
       @Override
@@ -67,7 +67,7 @@ public class DBHandler {
       }
     }.runTaskAsynchronously(Battlepass.getInstance());
   }
-  
+
   public List<BattlepassPlayer> getTopPlayers() {
     List<BattlepassPlayer> players = new ArrayList<>();
     try (Connection conn = Battlepass.getInstance().getConnection()) {
@@ -84,7 +84,7 @@ public class DBHandler {
     }
     return players;
   }
-  
+
   private static void executeSQLStatement(String sql) {
     try (Connection conn = Battlepass.getInstance().getConnection()) {
       Statement stmt = conn.createStatement();
@@ -93,4 +93,35 @@ public class DBHandler {
       Battlepass.getInstance().getLogger().warning(e.getMessage());
     }
   }
+
+  public int getPlayerRank(UUID playerUUID) {
+    int rank = -1;
+    String sql = "WITH RankedPlayers AS (" +
+        "    SELECT " +
+        "        id, " +
+        "        ROW_NUMBER() OVER (ORDER BY xp DESC) as player_rank " +
+        "    FROM " +
+        "        players " +
+        ") " +
+        "SELECT player_rank " +
+        "FROM RankedPlayers " +
+        "WHERE id = ?;";
+
+    try (Connection conn = Battlepass.getInstance().getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setString(1, playerUUID.toString());
+
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          rank = rs.getInt("player_rank");
+        }
+      }
+    } catch (SQLException e) {
+      Battlepass.getInstance().getLogger()
+          .warning("Error getting rank for player " + playerUUID + ": " + e.getMessage());
+    }
+    return rank;
+  }
+
 }

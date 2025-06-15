@@ -27,10 +27,8 @@ import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class BattlePassCommand implements CommandExecutor, TabCompleter {
 
@@ -66,6 +64,9 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
         String subCommand = args[0].toLowerCase();
 
         switch (subCommand) {
+            case "spigui":
+                // Sample command
+                return true;
             case "help":
                 // Show help message
                 if (!(sender.hasPermission(BattlePassPermissions.USE_BATTLEPASS))) {

@@ -2,6 +2,7 @@
 build
 .gradle
 server
+startserver
 # Compiled class file
 *.class
 
