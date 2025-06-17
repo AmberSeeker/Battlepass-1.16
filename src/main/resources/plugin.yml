@@ -1,5 +1,5 @@
 name: BattlePass
-version: 1.1
+version: 1.2
 main: battlepass.main.Battlepass
 author: Amber
 description: Players love to hate on this.

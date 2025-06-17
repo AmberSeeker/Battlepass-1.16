@@ -115,7 +115,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "AmberUtils",
+            "Specification-Title": "Battlepass",
             "Specification-Vendor": "AmberSeeker",
             "Specification-Version": version,
             "Implementation-Title": project.name,

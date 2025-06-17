@@ -140,7 +140,6 @@ public class InventoryUtils {
         boolean forward = true;
         final int startingIndex;
 
-        // Find starting position (5th slot of first row = slot 4)
         {
             int startSlot = 4;
             int foundIndex = 0;
@@ -161,7 +160,6 @@ public class InventoryUtils {
                 return;
             }
 
-            // Set all border slots to filler first
             for (int i = 0; i < borders.size(); i++) {
                 int slot = borders.get(i);
                 Material mat = (i == currentIndex) ? highlight : filler;
@@ -173,27 +171,25 @@ public class InventoryUtils {
                 inv.setItem(slot, pane);
             }
 
-            // Advance to next position
             if (forward) {
                 currentIndex++;
-                // If we've gone full circle back to start, reverse direction
                 if (currentIndex >= borders.size()) {
-                    currentIndex = 0; // Wrap to beginning
+                    currentIndex = 0;
                 }
-                // Check if we're back at starting position after going around
+
                 if (currentIndex == startingIndex && currentIndex != 0) {
                     forward = false;
-                    currentIndex--; // Start going backward
+                    currentIndex--;
                 }
             } else {
                 currentIndex--;
                 if (currentIndex < 0) {
-                    currentIndex = borders.size() - 1; // Wrap to end
+                    currentIndex = borders.size() - 1;
                 }
-                // Check if we're back at starting position from reverse direction
+
                 if (currentIndex == startingIndex) {
                     forward = true;
-                    currentIndex++; // Start going forward again
+                    currentIndex++;
                 }
             }
         }
@@ -231,6 +227,6 @@ public class InventoryUtils {
 
                 tick++;
             }
-        }.runTaskTimer(Battlepass.getInstance(), 0L, 10L); // Slightly slower for flash effect
+        }.runTaskTimer(Battlepass.getInstance(), 0L, 10L);
     }
 }

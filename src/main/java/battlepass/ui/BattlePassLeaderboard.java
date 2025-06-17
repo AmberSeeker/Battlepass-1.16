@@ -46,8 +46,11 @@ public class BattlePassLeaderboard {
                 inventory.setItem(49,
                         getPlayerHead(player, bpp, Battlepass.getDatabase().getPlayerRank(player.getUniqueId())));
             }
+            else {
+                inventory.setItem(49, new ItemStack(Material.SKELETON_SKULL));
+            }
             player.openInventory(inventory);
-            InventoryUtils.playBorderAnimation(player, BorderAnimationType.RAINBOW_LOOP, null);
+            InventoryUtils.playBorderAnimation(player, BorderAnimationType.RAINBOW_LOOP, 49);
         } else {
             sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
         }
