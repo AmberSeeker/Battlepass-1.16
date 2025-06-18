@@ -75,6 +75,9 @@ public class InventoryUtils {
     }
 
     public static void playBorderAnimation(Player player, BorderAnimationType type, @Nullable int... skippedSlots) {
+        if (!Battlepass.getInstance().getBattlePassConfig().animatedGUIEnabled()) {
+            return;
+        }
         List<Integer> borderSlots = new ArrayList<>(Arrays.asList(
                 0, 1, 2, 3, 4, 5, 6, 7, 8,
                 17, 26, 35, 44,

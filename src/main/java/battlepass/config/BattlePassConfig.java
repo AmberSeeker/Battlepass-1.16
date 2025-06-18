@@ -14,7 +14,11 @@ public class BattlePassConfig {
         this.config = config;
         Battlepass.getInstance().rewardMap = new HashMap<>();
         Battlepass.getInstance().premiumRewardMap = new HashMap<>();
-        for (int x = 1; x < 28; x++) {
+        int rewardCount = config.getConfigurationSection("main") != null
+        ? config.getConfigurationSection("main").getInt("rewardCount", 27)
+        : 27;
+
+        for (int x = 1; x <= rewardCount; x++) {
             BattlePassReward battlePassReward = getBattlePassReward("" + x, false);
             BattlePassReward premiumBattlePassReward = getBattlePassReward("" + x, true);
             if (battlePassReward != null)
@@ -26,7 +30,7 @@ public class BattlePassConfig {
         loadText();
     }
 
-    public BattlePassReward getBattlePassReward(String name, boolean premium) {
+    private BattlePassReward getBattlePassReward(String name, boolean premium) {
         ConfigurationSection rewards = premium ? config.getConfigurationSection("premium." + name) :
                 config.getConfigurationSection("rewards." + name);
         if (rewards != null && !rewards.getKeys(false).isEmpty()) {
@@ -44,7 +48,7 @@ public class BattlePassConfig {
         }
     }
 
-    public void loadXPRates() {
+    private void loadXPRates() {
         ConfigurationSection xp = config.getConfigurationSection("xp");
         BattlePassXp battlePassXp = Battlepass.getInstance().battlePassXp;
         if (xp != null) {
@@ -59,7 +63,7 @@ public class BattlePassConfig {
         }
     }
 
-    public void loadText() {
+    private void loadText() {
         ConfigurationSection text = config.getConfigurationSection("text");
         BattlePassText battlePassText = Battlepass.getInstance().battlePassText;
         if (text != null) {
@@ -75,14 +79,8 @@ public class BattlePassConfig {
         return main != null && main.getBoolean("leaderboardGUIEnabled");
     }
 
-    public void loadMain() {
-        ConfigurationSection text = config.getConfigurationSection("main");
-        BattlePassText battlePassText = Battlepass.getInstance().battlePassText;
-        if (text != null) {
-            battlePassText.battlePassTitle = text.getString("battlePassTitle");
-            battlePassText.premiumRequiredText = text.getString("premiumRequiredText");
-        } else {
-            Battlepass.getInstance().getLogger().severe("Error when trying to load text");
-        }
+    public boolean animatedGUIEnabled() {
+        ConfigurationSection main = config.getConfigurationSection("main");
+        return main != null && main.getBoolean("animatedGUIEnabled", false);
     }
 }

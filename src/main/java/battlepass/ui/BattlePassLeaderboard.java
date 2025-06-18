@@ -39,14 +39,14 @@ public class BattlePassLeaderboard {
 
             Inventory inventory = Bukkit.createInventory(new BattlepassInvHolder(), 54, "  §8§lBattlepass Leaderboard");
             inventory = InventoryUtils.fillInventory(inventory, true, Material.BLACK_STAINED_GLASS_PANE);
-            inventory = InventoryUtils.createBorder(inventory, Material.PINK_STAINED_GLASS_PANE, true, Material.YELLOW_STAINED_GLASS_PANE);
+            inventory = InventoryUtils.createBorder(inventory, Material.PINK_STAINED_GLASS_PANE, true,
+                    Material.YELLOW_STAINED_GLASS_PANE);
             showPlayers(inventory, playerList);
             BattlepassPlayer bpp = Battlepass.getInstance().playerDataMap.get(player.getUniqueId());
             if (bpp != null) {
                 inventory.setItem(49,
                         getPlayerHead(player, bpp, Battlepass.getDatabase().getPlayerRank(player.getUniqueId())));
-            }
-            else {
+            } else {
                 inventory.setItem(49, new ItemStack(Material.SKELETON_SKULL));
             }
             player.openInventory(inventory);
