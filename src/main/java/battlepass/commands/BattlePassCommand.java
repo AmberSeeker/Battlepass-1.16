@@ -44,8 +44,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length == 0) {
-            // Show help or main battlepass GUI
-            // TODO: Implement main battlepass interface
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(plugin.PLUGIN_NAME + "§cThis command can only be used by players!");
                 return true;
@@ -202,7 +200,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
                 case "checkxp":
                 case "addxp":
                 case "setxp":
-                    // Show online player names
                     String input = args[1].toLowerCase();
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (player.getName().toLowerCase().startsWith(input)) {
@@ -218,7 +215,6 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
                     break;
             }
         } else if (args.length == 3) {
-            // Third argument - only for addxp and setxp (XP amount)
             String subCommand = args[0].toLowerCase();
 
             switch (subCommand) {
@@ -469,61 +465,3 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
         player.sendMessage(plugin.PLUGIN_NAME + ChatColor.YELLOW + "Thank you for supporting the server!");
     }
 }
-
-/*
- * TDOD: Add a new command for premium users to be run when a player upgrades to
- * premium.
- * The command name should be /battlepass premiumupgrade.
- * When someone buys premium, they get the battlepass.premiumupgrade and
- * battlepass.premium permission.
- * When someone buys the battlepass upgrade, run a command /battlepass
- * premiumupgrade <player_name>.
- * If they have the battlepass.premium permission, dont do anything, else give
- * them the premium rewards and check their tier, add that to an item.paper as
- * metadata,
- * and give them the item.paper with the metadata.
- * The paper item should have the following metadata:
- * - tier: the tier they are on
- * - name: the name of the player who purchased premium
- * When the player right clicks(/ or runs a command /battlepass claimpremium)
- * the paper item, it should check their name and tier and give them the rewards
- * for that tier and ones before it.
- * Cannot be used by other players, only the player who purchased premium.
- * Remove the paper item from the player's inventory after use.
- * 
- * Command Prcedure:
- * 1. Player purchases premium through the store.
- * 2. The server detects the purchase and runs the command /battlepass
- * premiumupgrade <player_name>.
- * 3. The command checks if the player has the battlepass.premium permission.
- * 4. If the player has the permission, it sends a message saying they already
- * have premium.
- * 5. If the player does not have the permission, it runs a method which adds
- * the battlepass.premium permission.
- * 6. Then it checks their level and tiers they have completed on the basic
- * pass.
- * 7. If the tier is greater than 0, it create a paper item with metadata
- * containing the tier and player name.
- * 8. The paper item is given to the player. Method over.
- * 9. The player can right click the paper item or run a command /battlepass
- * claimpremium while holding the paper to claim their premium rewards.
- * 10. The command checks the player's name and tier from the paper item
- * metadata.
- * 11. It then gives the player the rewards for that tier and all previous
- * tiers.
- * 12. After claiming the rewards, the paper item is removed from the player's
- * inventory.
- * 13. The player is sent a message thanking them for their support and
- * informing them of the rewards they received.
- * END
- * 
- * Then run the command /battlepass premiumupgrade <player_name> to get give
- * premium rewards and unlocks.
- * This command should give the player all the premium rewards and unlocks, and
- * also send them a message thanking them for their support.
- * The command should also check if the player has already purchased premium,
- * and if so, send them a message saying they already have premium. If they do
- * not have premium, it should give them the premium rewards and unlocks, and
- * send them a message thanking them for their support.
- * 
- */

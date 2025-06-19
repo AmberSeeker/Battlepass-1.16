@@ -36,7 +36,7 @@ public class Battlepass extends JavaPlugin {
 
     private static final String CONFIG = "battlepass.conf";
 
-    public final String PLUGIN_NAME = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_BLUE + "Battlepass"+ ChatColor.DARK_GRAY + "] ";
+    public final String PLUGIN_NAME = ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "Battlepass"+ ChatColor.DARK_GRAY + "] ";
 
     public final Map<UUID, BattlepassPlayer> playerDataMap = new HashMap<>();
 
@@ -142,7 +142,6 @@ public class Battlepass extends JavaPlugin {
             return;
         }
 
-        // TODO: Change to singular /battlepass command
         new BattlePassCommand(this);
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         Arclight.registerForgeEvent(this, Pixelmon.EVENT_BUS, new PixelmonEvents());
@@ -230,6 +229,3 @@ public class Battlepass extends JavaPlugin {
         getLogger().info("Battlepass plugin disabled.");
     }
 }
-
-// TODO: players with buffered xp should be saved to database on disable
-// TODO: handle money rewards economy plugin integration

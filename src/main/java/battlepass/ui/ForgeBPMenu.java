@@ -165,7 +165,7 @@ public class ForgeBPMenu {
                     combined.add(premiumButtons.get(premiumIndex++));
                 } else {
                     combined.add(GooeyButton.builder().title(Utils.toText("&eKeep Going!"))
-                            .display(new ItemStack(Items.YELLOW_STAINED_GLASS_PANE)).build()); // Fill with empty slot
+                            .display(new ItemStack(Items.YELLOW_STAINED_GLASS_PANE)).build());
                 }
             }
         }
