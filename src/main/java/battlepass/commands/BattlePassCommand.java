@@ -21,7 +21,6 @@ import battlepass.config.BattlePassReward;
 import battlepass.db_entities.BattlepassPlayer;
 import battlepass.main.Battlepass;
 import battlepass.ui.BattlePassLeaderboard;
-import battlepass.ui.BattlePassMenu;
 import battlepass.ui.ForgeBPMenu;
 import battlepass.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
