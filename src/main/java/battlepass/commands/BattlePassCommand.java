@@ -22,6 +22,7 @@ import battlepass.db_entities.BattlepassPlayer;
 import battlepass.main.Battlepass;
 import battlepass.ui.BattlePassLeaderboard;
 import battlepass.ui.BattlePassMenu;
+import battlepass.ui.ForgeBPMenu;
 import battlepass.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -57,7 +58,7 @@ public class BattlePassCommand implements CommandExecutor, TabCompleter {
             }
 
             player.sendMessage(plugin.PLUGIN_NAME + "§eOpening BattlePass GUI...");
-            BattlePassMenu.openMenu(player);
+            ForgeBPMenu.openMenu(player);
             return true;
         }
 

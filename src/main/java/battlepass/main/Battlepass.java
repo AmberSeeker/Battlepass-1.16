@@ -19,7 +19,6 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import ca.landonjw.gooeylibs2.api.UIManager;
 import net.minecraftforge.fml.ModList;
 
 import java.io.File;
