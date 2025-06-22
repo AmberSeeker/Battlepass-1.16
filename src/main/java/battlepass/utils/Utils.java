@@ -1,5 +1,7 @@
 package battlepass.utils;
 
+import battlepass.config.BattlePassPermissions;
+import battlepass.config.BattlePassPrestige;
 import battlepass.config.BattlePassReward;
 import battlepass.db_entities.BattlepassPlayer;
 import battlepass.main.Battlepass;
@@ -57,14 +59,14 @@ public class Utils {
     }
 
     public static int getPlayerMultiplier(Player player) {
-    List<MetadataValue> metadataValues = player.getMetadata("battlepass.multiplier");
-    for (MetadataValue value : metadataValues) {
-        if (value.getOwningPlugin() == Battlepass.getInstance()) {
-            return value.asInt();
+        List<MetadataValue> metadataValues = player.getMetadata("battlepass.multiplier");
+        for (MetadataValue value : metadataValues) {
+            if (value.getOwningPlugin() == Battlepass.getInstance()) {
+                return value.asInt();
+            }
         }
+        return 1;
     }
-    return 1;
-}
 
     private static void processLevels(Player player, int currentLvl, int newLvl) {
         for (int level = currentLvl + 1; level <= newLvl; level++) {
@@ -85,6 +87,43 @@ public class Utils {
             if (premiumRewards != null && player.hasPermission("battlepass.premium")) {
                 processRewards(premiumRewards, player);
             }
+
+            BattlePassPrestige bpPrestige = Battlepass.getInstance().battlePassPrestige;
+            if (bpPrestige.prestigeEnabled) {
+                processPrestige(player, level, bpPrestige);
+            }
+        }
+    }
+
+    private static void processPrestige(Player player, int level, BattlePassPrestige bpPrestige) {
+        int finalPrestige = 0;
+
+        if (bpPrestige.perpetualPrestige) {
+            if (level % bpPrestige.levelsPerPrestige == 0) {
+                finalPrestige = bpPrestige.prestigePerLevel;
+            }
+        } else if (level == bpPrestige.levelsPerPrestige) {
+            finalPrestige = bpPrestige.prestigePerLevel;
+        }
+
+        if (finalPrestige <= 0)
+            return;
+        
+        BattlepassPlayer bpp = Battlepass.getInstance().playerDataMap.get(player.getUniqueId());
+        if (bpp == null)
+            return;
+
+        if (bpPrestige.bonusPrestigeForPremium && player.hasPermission(BattlePassPermissions.PREMIUM_PERMISSION)) {
+            finalPrestige *= bpPrestige.prestigeMultiplierForPremium;
+        }
+
+        bpp.setPrestige(bpp.getPrestige() + finalPrestige);
+        player.sendMessage(Battlepass.getInstance().PLUGIN_NAME + "§eYou have received " + finalPrestige
+                + " prestige points!");
+
+        if (bpPrestige.resetOnPrestige) {
+            bpp.setXp(0);
+            player.sendMessage(Battlepass.getInstance().PLUGIN_NAME + "§eYour Battlepass XP has been reset to 0.");
         }
     }
 
@@ -96,13 +135,18 @@ public class Utils {
                 double currentMoney = Battlepass.getInstance().getVaultEconomy().getBalance(player);
                 if (Battlepass.getInstance().getVaultEconomy().depositPlayer(player, money).transactionSuccess()) {
                     player.sendMessage("§eYou have received " + getFormattedDouble(money) + " money.");
-                    Battlepass.getInstance().getLogger().info(player.getName() + " received " + getFormattedDouble(money) + " money. Previous balance: " + getFormattedDouble(currentMoney) + ", New balance: " + getFormattedDouble(currentMoney + money));
+                    Battlepass.getInstance().getLogger()
+                            .info(player.getName() + " received " + getFormattedDouble(money)
+                                    + " money. Previous balance: " + getFormattedDouble(currentMoney)
+                                    + ", New balance: " + getFormattedDouble(currentMoney + money));
                 } else {
                     player.sendMessage("§cFailed to deposit money. Please contact an admin.");
-                    Battlepass.getInstance().getLogger().warning("Failed to deposit money for " + player.getName() + ".");
+                    Battlepass.getInstance().getLogger()
+                            .warning("Failed to deposit money for " + player.getName() + ".");
                 }
             } else {
-                Battlepass.getInstance().getLogger().warning("No economy plugin found. Money rewards are not available.");
+                Battlepass.getInstance().getLogger()
+                        .warning("No economy plugin found. Money rewards are not available.");
             }
         }
         if (reward.getCommands() != null) {

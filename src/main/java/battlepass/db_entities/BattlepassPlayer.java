@@ -6,6 +6,8 @@ public class BattlepassPlayer {
   private UUID id;
   
   private long xp;
+
+  private int prestige;
   
   public BattlepassPlayer(UUID id) {
     this.id = id;
@@ -21,5 +23,13 @@ public class BattlepassPlayer {
   
   public void setXp(long xp) {
     this.xp = xp;
+  }
+
+  public int getPrestige() {
+    return this.prestige;
+  }
+
+  public void setPrestige(int prestige) {
+    this.prestige = prestige;
   }
 }

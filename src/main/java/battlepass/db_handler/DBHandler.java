@@ -21,14 +21,18 @@ public class DBHandler {
         " xp INTEGER DEFAULT 0\n" +
         ");";
     executeSQLStatement(sql);
+
+    // New Columns
+    addColumnIfNotExists("players", "prestige", "INTEGER DEFAULT 0");
   }
 
   public void savePlayer(BattlepassPlayer battlepassPlayer) {
-    String sql = "INSERT OR REPLACE INTO players (id, xp) VALUES(?, ?)";
+    String sql = "INSERT OR REPLACE INTO players (id, xp, prestige) VALUES(?, ?, ?)";
     try (Connection conn = Battlepass.getInstance().getConnection()) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, battlepassPlayer.getId().toString());
       pstmt.setLong(2, battlepassPlayer.getXp());
+      pstmt.setInt(3, battlepassPlayer.getPrestige());
       pstmt.executeUpdate();
     } catch (SQLException e) {
       Battlepass.getInstance().getLogger().warning(e.getMessage());
@@ -47,6 +51,7 @@ public class DBHandler {
           while (results.next()) {
             battlepassPlayer = new BattlepassPlayer(uuid);
             battlepassPlayer.setXp(results.getLong("xp"));
+            battlepassPlayer.setPrestige(results.getInt("prestige"));
           }
           if (battlepassPlayer != null) {
             Battlepass.getInstance().playerDataMap.put(uuid, battlepassPlayer);
@@ -122,6 +127,32 @@ public class DBHandler {
           .warning("Error getting rank for player " + playerUUID + ": " + e.getMessage());
     }
     return rank;
+  }
+
+  public void addColumnIfNotExists(String tableName, String columnName, String columnDefinition) {
+    String query = "PRAGMA table_info(" + tableName + ");";
+    boolean columnExists = false;
+
+    try (Connection conn = Battlepass.getInstance().getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery()) {
+      while (rs.next()) {
+        String existingColumn = rs.getString("name");
+        if (existingColumn.equalsIgnoreCase(columnName)) {
+          columnExists = true;
+          break;
+        }
+      }
+    } catch (SQLException e) {
+      Battlepass.getInstance().getLogger().warning("Error checking column " + columnName + ": " + e.getMessage());
+    }
+
+    if (!columnExists) {
+      String alterSQL = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDefinition + ";";
+      executeSQLStatement(alterSQL);
+      Battlepass.getInstance().getLogger()
+          .info("Added missing column '" + columnName + "' to table '" + tableName + "'.");
+    }
   }
 
 }

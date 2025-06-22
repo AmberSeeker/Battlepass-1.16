@@ -12,4 +12,8 @@ public class BattlePassXp {
   public double fishingXp;
   
   public double fishingXpMultiplier;
+
+  public double hatchXp;
+
+  public boolean eggCyclesBonusOnHatch;
 }

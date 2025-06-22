@@ -4,6 +4,7 @@ import io.izzel.arclight.api.Arclight;
 
 import battlepass.commands.BattlePassCommand;
 import battlepass.config.BattlePassConfig;
+import battlepass.config.BattlePassPrestige;
 import battlepass.config.BattlePassReward;
 import battlepass.config.BattlePassText;
 import battlepass.config.BattlePassXp;
@@ -43,6 +44,8 @@ public class Battlepass extends JavaPlugin {
     public final BattlePassXp battlePassXp = new BattlePassXp();
 
     public final BattlePassText battlePassText = new BattlePassText();
+
+    public final BattlePassPrestige battlePassPrestige = new BattlePassPrestige();
 
     public Map<Integer, BattlePassReward> rewardMap = new HashMap<>();
 
